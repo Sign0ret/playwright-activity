@@ -29,3 +29,32 @@ test.describe('Act 4: multiple pages', () => {
     await browser.close();
   });
 });
+
+test.describe('Page Methods Activity', () => {
+test('page methods demonstration', async () => {
+ const browser = await firefox.launch({ headless: false, slowMo: 50 });
+ console.log(browser.contexts().length);
+ const context = await browser.newContext();
+ console.log(browser.contexts().length);
+ const page = await context.newPage();
+
+    await page.goto('https://playwright.dev');
+    
+    // Take screenshot
+    await page.screenshot({ path: 'playwright-screenshot.png' });
+    console.log('Screenshot saved as playwright-screenshot.png');
+
+    await page.goto('https://github.com');
+    
+    // Use page.once to log when page is loaded
+    page.once('load', () => {
+      console.log('Page loaded!');
+    });
+
+    // Navigate to previous page based on the history
+    await page.goBack();
+    
+    // Verify we are in playwright again
+    await expect(page).toHaveURL('https://playwright.dev');
+  });
+});
